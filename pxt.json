@@ -1,0 +1,20 @@
+{
+    "name": "GroveUartWizFi360",
+    "version": "0.1.0",
+    "description": "A Microsoft MakeCode package for Grove Uart WizFi360",
+    "license": "MIT",
+    "dependencies": {
+        "core": "*"
+    },
+    "files": [
+        "README.md",
+        "main.ts"
+    ],
+    "testFiles": [
+    ],
+    "public": true,
+    "supportedTargets": [
+        "calliopemini"
+    ],
+    "preferredEditor": "tsprj"
+}
