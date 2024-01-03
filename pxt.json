@@ -1,6 +1,6 @@
 {
     "name": "GroveUartWizFi360",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "A Microsoft MakeCode package for Grove Uart WizFi360",
     "license": "MIT",
     "dependencies": {
