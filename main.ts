@@ -5,6 +5,14 @@
 //% groups='["UartWizFi360"]'
 namespace wizfi360 {
  
+    interface ATRespMatch {
+        match: string
+        rc: number
+    }
+
+    type ATRespMatches = ATRespMatch[]
+
+
     let isWifiConnected = false
 
     /**
@@ -14,9 +22,9 @@ namespace wizfi360 {
     //% group="UartWizFi360"
     export function setupWifi(ssid: string, passwd: string, timeout: number = 20000) {
         
-        const atRespMap = {"OK": 1, "ERROR": 2, "None": 3}
-        const atCWModeRespMap = {"OK": 1, "ERROR": 2, "None": 3}
-        const atCWJAPRespMap = {"WIFI GOT IP": 1, "ERROR": 2, "None": 3}
+        const atRespMap: ATRespMatches = [{match: "OK", rc: 1}, {match: "ERROR", rc: 2}, {match: "None", rc: 3}]
+        const atCWModeRespMap: ATRespMatches = [{match:"OK", rc: 1}, {match: "ERROR", rc: 2}, {match: "None", rc: 3}]
+        const atCWJAPRespMap: ATRespMatches = [{match:"WIFI GOT IP", rc: 1}, {match: "ERROR", rc: 2}, {match: "None", rc: 3}]
 
         let result = 0
         
@@ -43,7 +51,7 @@ namespace wizfi360 {
     //% group="UartWizFi360"
     export function wifiOK(timeout: number = 5000): boolean {
 
-        const atCmdRespMap = {"+CWJAP_CUR:": 1, "No AP": 2, "None": 3}
+        const atCmdRespMap: ATRespMatches = [{match: "+CWJAP_CUR:", rc: 1}, {match: "No AP", rc: 2}, {match: "None", rc:3 }]
 
         sendAtCmd("AT+CWJAP_CUR?")
 
@@ -75,18 +83,17 @@ namespace wizfi360 {
      */
     //% block="WaitATResponse?"
     //% group="UartWizFi360"
-    export function waitAtResponse(respMap: object, timeout: number) {
+    export function waitAtResponse(respList: ATRespMatches, timeout: number) {
 
         const start = input.runningTime()
         let buffer = ""
-        const keys = Object.keys(respMap)
 
         while ((input.runningTime() - start) < timeout) {
             buffer += serial.readString()
 
-            for (let k of keys) {
-                if (buffer.includes(k)) {
-                    return respMap[k];
+            for (let r of respList) {
+                if (buffer.includes(r.match)) {
+                    return r.rc;
                 }
             }
 
